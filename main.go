@@ -36,7 +36,7 @@ func main() {
 
 	apiUrlChannels := fmt.Sprintf("http://cackle.me/api/3.0/comment/chan/list.json?id=%s&siteApiKey=%s&accountApiKey=%s",
 		os.Getenv("ID"), os.Getenv("SITE_API_KEY"), os.Getenv("ACCOUNT_API_KEY"))
-	fmt.Println(apiUrlChannels)
+	//log.Println(apiUrlChannels)
 	page := 0
 	var allChannels []Channel
 	for {
@@ -44,7 +44,7 @@ func main() {
 		if err != nil {
 			log.Fatal(err)
 		}
-		fmt.Printf("Get channels, iteration %d, count %d\n", page+1, len(channels))
+		log.Printf("Get channels, iteration %d, count %d\n", page+1, len(channels))
 		page++
 		allChannels = append(allChannels, channels...)
 		if count < 100 {
@@ -52,10 +52,17 @@ func main() {
 		}
 		time.Sleep(time.Duration(timeout) * time.Second)
 	}
-	fmt.Printf("All channels count %d\n", len(allChannels))
-	file, _ := json.MarshalIndent(allChannels, "", " ")
-	_ = ioutil.WriteFile("channels.json", file, 0644)
+	log.Printf("All channels count %d\n", len(allChannels))
+	log.Printf("Saving all channels to file...\n")
 
+	file, err := json.MarshalIndent(allChannels, "", " ")
+	if err != nil {
+		log.Fatal(err)
+	}
+	err = ioutil.WriteFile("channels.json", file, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }
 
 func getChannels(baseApiUrl string, page int) (count int, channels []Channel, err error) {

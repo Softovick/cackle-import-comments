@@ -29,6 +29,9 @@ func main() {
 	}
 	log.Printf("Get channels from widget ID: %s", os.Getenv("ID"))
 	timeout, err := strconv.Atoi(os.Getenv("TIMEOUT"))
+	if err != nil || timeout <= 0 {
+		timeout = 5
+	}
 
 	apiUrlChannels := fmt.Sprintf("http://cackle.me/api/3.0/comment/chan/list.json?id=%s&siteApiKey=%s&accountApiKey=%s",
 		os.Getenv("ID"), os.Getenv("SITE_API_KEY"), os.Getenv("ACCOUNT_API_KEY"))

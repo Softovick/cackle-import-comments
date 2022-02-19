@@ -3,6 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"log"
 	"net/http"
 	"os"
@@ -52,6 +53,8 @@ func main() {
 		time.Sleep(time.Duration(timeout) * time.Second)
 	}
 	fmt.Printf("All channels count %d\n", len(allChannels))
+	file, _ := json.MarshalIndent(allChannels, "", " ")
+	_ = ioutil.WriteFile("channels.json", file, 0644)
 
 }
 
